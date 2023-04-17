@@ -1,0 +1,134 @@
+;;View Tradeable tokens
+(define-public (VIEW-TRADEABLE-TOKEN
+    (token-name (string-ascii 20))
+) 
+    (ok (unwrap! (get asset (map-get? TRADEABLE-TOKENS {asset-name: token-name})) TRADEABLE-ASSET-NOT-FOUND))
+)
+;;ALL ADMIN FUNCTIONS ENDS=======================================================
+
+;;This is a map for all trade offer index belonging to a trader
+(define-map TRADES { owner: principal, asset: principal } {index: uint})
+
+;;This is a map of all Trade offers that are available
+(define-map TRADE-OFFERS uint
+    { 
+        index: uint,
+        owner: principal,
+        asset-to-trade: principal,
+        asset-traded-for: principal,
+        amount: uint,
+        amount-each: uint,        
+    }
+)
+
+;;Get Asset owner by index
+(define-read-only (GET-TRADE-OFFER-OWNER-BY-INDEX 
+    (offer-index uint)
+) 
+    (ok (unwrap! (get owner (map-get? TRADE-OFFERS offer-index)) ASSET-NOT-FOUND))
+)
+
+;;Gets trade index
+(define-read-only (GET-TRADE-OFFER-INDEX 
+    (owner principal) 
+    (asset <core-ft-trait>)
+)
+    (ok (unwrap! (get index (map-get? TRADES {owner: owner, asset: (contract-of asset)}))  ASSET-NOT-FOUND))
+)
+
+;;ALL READ-ONLY FUNCTIONS START=====================================================
+;;Gets the totalcount for available counts
+(define-read-only (GET-OFFER-COUNT) 
+    (ok (var-get OFFER-COUNT))
+)
+
+;;Gets the balance for trade offers
+(define-read-only (GET-OFFER-BALANCE 
+    (offer-index uint)
+) 
+    (ok (unwrap! (get amount (map-get? TRADE-OFFERS offer-index)) ASSET-NOT-FOUND))
+)
+
+;;Views a specific traders trade offer
+(define-read-only (VIEW-ONGOING-TRADE-OFFER (offer-index uint)) 
+    (ok (unwrap! (map-get? TRADE-OFFERS offer-index) ASSET-NOT-FOUND))
+)
+;;ALL READ-ONLY FUNCTIONS ENDS======================================================
+
+;;ALL PRIVATE FUNCTIONS START=======================================================
+;;Handles FT-Asset transfer
+(define-private (FT-TOKEN-TRANSFER 
+    (asset-for-transfer <core-ft-trait>)
+    (amount uint)
+    (from principal)
+    (to principal)
+) 
+    (ok (contract-call? asset-for-transfer transfer amount from to none))
+)
+
+;;Handles STX Asset transfer
+(define-private (STX-TOKEN-TRANSFER 
+    (amount uint)
+    (from principal)
+    (to principal)
+) 
+    (ok (stx-transfer? amount from to))
+)
+;;ALL PRIVATE FUNCTIONS ENDS=======================================================
+
+;;Trades Fungible token assets
+(define-public (TRADE-FT-ASSET 
+    (amount uint)
+    (amount-each uint)
+    (asset-to-trade <core-ft-trait>)    
+    (asset-traded-for <core-ft-trait>) 
+    (owner principal)
+) 
+        (let
+            (
+                (index (get index (map-get? TRADES {owner: owner, asset: (contract-of asset-to-trade)})))
+                (newOfferCount (+ (var-get OFFER-COUNT) u1))
+            )
+            (asserts! (is-eq owner tx-sender) UNAUTHORIZED-USER)
+            ;;(asserts! (map-get? ) TRADEABLE-ASSET-NOT-FOUND)
+            (if (is-none index)
+                (begin                    
+                    (map-set TRADE-OFFERS newOfferCount 
+                        {
+                            index: newOfferCount,
+                            owner: owner,
+                            asset-to-trade: (contract-of asset-to-trade),
+                            asset-traded-for: (contract-of asset-traded-for),
+                            amount: amount,
+                            amount-each: amount-each,
+
+                        }
+                    )
+                    (var-set OFFER-COUNT newOfferCount)
+                    (ok (map-set TRADES {owner: owner, asset: (contract-of asset-to-trade)} {index: newOfferCount}))
+                )
+                (let
+                    (
+                        (existingOfferIndex (unwrap! (get index (map-get? TRADES {owner: owner, asset: (contract-of asset-to-trade)})) ASSET-NOT-FOUND))
+                        (existingOwner (unwrap! (get owner (map-get? TRADE-OFFERS existingOfferIndex)) ASSET-NOT-FOUND))
+                        (existingAssetToTrade (unwrap! (get asset-to-trade (map-get? TRADE-OFFERS existingOfferIndex)) ASSET-NOT-FOUND))
+                        (existingAssetTradedFor (unwrap! (get asset-traded-for (map-get? TRADE-OFFERS existingOfferIndex)) ASSET-NOT-FOUND))
+                        (existingAmount (unwrap! (get amount (map-get? TRADE-OFFERS existingOfferIndex)) ASSET-NOT-FOUND))
+                        (existingAmountEach (unwrap! (get amount-each (map-get? TRADE-OFFERS existingOfferIndex)) ASSET-NOT-FOUND))
+                    )
+                    (is-ok (FT-TOKEN-TRANSFER asset-to-trade amount owner CONTRACT-ADMIN))
+                    (ok (map-set TRADE-OFFERS existingOfferIndex 
+                        {
+                            index: existingOfferIndex,
+                            owner: existingOwner,
+                            asset-to-trade: existingAssetToTrade,
+                            asset-traded-for: existingAssetTradedFor,
+                            amount: (+ existingAmount amount),
+                            amount-each: existingAmountEach,
+
+                        }
+                    ))
+                )
+            )
+        )
+)

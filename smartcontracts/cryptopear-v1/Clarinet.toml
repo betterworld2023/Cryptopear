@@ -1,0 +1,38 @@
+[project]
+name = 'stacks-swap'
+description = ''
+authors = []
+telemetry = true
+cache_dir = '.cache'
+
+[[project.requirements]]
+contract_id = 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard'
+
+[[project.requirements]]
+contract_id = 'SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait'
+
+[[project.requirements]]
+contract_id = 'STT4SQP5RC1BFAJEQKBHZMXQ8NQ7G118F0XRWTMV.sip-010-trait-ft-standard'
+[contracts.cryptopear-v1]
+path = 'contracts/cryptopear-v1.clar'
+clarity_version = 1
+
+[contracts.token-a]
+path = 'contracts/token-a.clar'
+clarity_version = 1
+
+[contracts.token-b]
+path = 'contracts/token-b.clar'
+clarity_version = 1
+
+[contracts.token-c]
+path = 'contracts/token-c.clar'
+clarity_version = 1
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false

@@ -1,0 +1,9 @@
+.trades {
+    background-color: rgb(24, 27, 31);
+    border-radius: 5%;
+}
+
+p {
+    color: bisque;
+    margin-left: 10px;
+}
