@@ -7,14 +7,8 @@ import AlarmIcon from '@mui/icons-material/Alarm';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import './Trade.css';
-import Modals from '../modal/Modals';
 
-export default function Trades({select, setSelect, open, setOpen}) {
-  const handleOpenModalBySelect = (selecter) => {
-    console.log(selecter);
-    setSelect(selecter)
-    setOpen(true);
-  };
+export default function Trades({ tradeId, bns, publisher, quantity, cost, salesAsset, returnAsset }) {
   return (
     <>
       <Card
@@ -26,28 +20,27 @@ export default function Trades({select, setSelect, open, setOpen}) {
         }}
       >
         <div className='trades'>
-          <p>Trade ID: { }</p>
+          <p>Trade ID: {tradeId}</p>
           <center>
             <img alt='trading-asset' src="Nycc.png" height={200} width={200} />
             <img alt='trading-asset-for' src="Stx.png" height={100} width={100} />
           </center>
-          <p>Trade By user: { }</p>
-          <p>Quantity: { }{ }</p>
-          <p>Amount Each: { }{ }</p>
+          <p>Trade By: {bns || `${String(publisher).substring(0, 4)}.. ${String(publisher).substring(String(publisher).length - 4, String(publisher).length)}`}</p>
+          <p>Quantity: {quantity} <span>{salesAsset}</span></p>
+          <p>Amount Each: {cost} <span>{returnAsset}</span></p>
           <Stack direction="row" spacing={11}>
-            <IconButton color="secondary" aria-label="alarm" onClick={()=>handleOpenModalBySelect('trade_status_modal')}>
+            <IconButton color="secondary" aria-label="alarm" >
               <AlarmIcon />
             </IconButton>
-            <IconButton color="warning" aria-label="share" onClick={()=>handleOpenModalBySelect('share_modal')}>
+            <IconButton color="warning" aria-label="share" >
               <ShareIcon />
             </IconButton>
-            <IconButton color="success" aria-label="cart" onClick={()=>handleOpenModalBySelect('buy_modal')}>
+            <IconButton color="success" aria-label="cart" >
               <AddShoppingCartIcon />
             </IconButton>
           </Stack>
         </div>
       </Card>
-      <Modals select = {select} open = {open} setOpen = {setOpen} setSelect={setSelect}/>
     </>
   );
 }

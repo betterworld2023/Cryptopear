@@ -27,9 +27,9 @@ import TabList from '@mui/lab/TabList';
 
 //Js Files Import
 import { style, Item, getStyles } from './Styler.js'
-import ContractDeploy from '../../services/stacks/ContractDeploy';
+// import ContractDeploy from '../../services/stacks/ContractDeploy';
 import { supportedAssets } from '../../lib/constants.js';
-import ContractCall from '../../services/stacks/ContractCalls.js';
+// import ContractCall from '../../services/stacks/ContractCalls.js';
 
 const Modals = ({ select, setSelect, open, setOpen }) => {
     const theme = useTheme();
@@ -97,10 +97,10 @@ const Modals = ({ select, setSelect, open, setOpen }) => {
         setSelect(5);
         setValue('1');
     };
-
+    // Hello
     const tradeModal = () => {
         const tabContents = [null,
-            <>            
+            <>
                 <Grid item xs={8}>
                     <Item>
                         {/* Sellect functionality */}
@@ -149,7 +149,7 @@ const Modals = ({ select, setSelect, open, setOpen }) => {
                         <Fab color="primary" onClick={handleClose} aria-label="add">
                             <CancelIcon />
                         </Fab>
-                        <ContractCall contractFunctionName={tradingAsset['funtion_name']} trading_Asset={tradingAsset['asset_address']} asset_for={forAsset['asset_address']} amount={tradingAmount} amount_for={forAmount} />
+                        {/* <ContractCall contractFunctionName={tradingAsset['funtion_name']} trading_Asset={tradingAsset['asset_address']} asset_for={forAsset['asset_address']} amount={tradingAmount} amount_for={forAmount} /> */}
                     </Item>
                 </Grid>
             </>,
@@ -176,7 +176,7 @@ const Modals = ({ select, setSelect, open, setOpen }) => {
                         <Fab color="primary" onClick={handleClose} aria-label="add">
                             <CancelIcon />
                         </Fab>
-                        <ContractCall contractFunctionName={tradingAsset} args={[]} />
+                        {/* <ContractCall contractFunctionName={tradingAsset} args={[]} /> */}
                     </Item>
                 </Grid>
             </>
@@ -275,7 +275,7 @@ const Modals = ({ select, setSelect, open, setOpen }) => {
                             <Fab color="primary" onClick={handleClose} aria-label="add">
                                 <CancelIcon />
                             </Fab>
-                            <ContractDeploy contractName={contract.name} contract={contract.contract} />
+                            {/* <ContractDeploy contractName={contract.name} contract={contract.contract} /> */}
                         </Item>
                     </Grid>
                 </Grid>

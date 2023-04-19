@@ -11,8 +11,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import { authenticate, getUserData, userSession } from "../../services/stacks/ConnectWallet";
-import SideBarMenue from '../drawer/Drawer';
+import { userSession, wallet } from '../../store/wallet';
+// Defined Component
+import HeaderMenue from '../header/HeaderMenue';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -65,14 +66,14 @@ const darkTheme = createTheme({
     },
 });
 
-export default function Header({ select, setSelect, open, setOpen }) {
+export default function Header({ network, networkToggle, handleNetworkToggle }) {
     return (
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
             <ThemeProvider theme={darkTheme}>
                 <AppBar position="static" color="primary">
                     <Toolbar>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={() => getUserData()} sx={{ p: 0 }}>
+                            <IconButton sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/logo.svg" />
                             </IconButton>
                         </Tooltip>
@@ -88,8 +89,8 @@ export default function Header({ select, setSelect, open, setOpen }) {
                         </Search>
                         {
                             userSession.isUserSignedIn()
-                                ? <SideBarMenue select={select} setSelect={setSelect} open={open} setOpen={setOpen} />
-                                : <IconButton aria-label="fingerprint" color="success" onClick={() => authenticate()}><Fingerprint /></IconButton>
+                                ? <HeaderMenue network={network} networkToggle={networkToggle} handleNetworkToggle={handleNetworkToggle} />
+                                : <IconButton onClick={() => wallet.login()} aria-label="fingerprint" color="success"><Fingerprint /></IconButton>
                         }
                     </Toolbar>
                 </AppBar>
