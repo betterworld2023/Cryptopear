@@ -1,3 +1,5 @@
+import {StacksTestnet, StacksMainnet} from '@stacks/network'
+
 export const supportedAssets = [
     {
 
@@ -36,4 +38,19 @@ export const supportedAssets = [
 
     },
 
+]
+
+export const network = [
+    {
+        label: 'testnet',
+        network: new StacksTestnet,
+        chain: 'stacks',
+        toggled: false
+    },
+    {
+        label: 'mainnet',
+        network: new StacksMainnet,
+        chain: 'stacks',
+        toggled: true
+    }
 ]

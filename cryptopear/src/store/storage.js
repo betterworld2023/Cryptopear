@@ -7,7 +7,6 @@ export const storage = {
             const result = await gaiaStorage.putFile(fileName, file, { encrypt: false });
             return { success: true, result: result }
         } catch (error) {
-            console.log(error)
             return { success: false, result: [] }
         }
     },
@@ -16,7 +15,6 @@ export const storage = {
             const result = await gaiaStorage.deleteFile(fileName)
             return { success: true, result: result }
         } catch (error) {
-            console.log(error)
             return { success: false, result: [] }
         }
     },
@@ -25,7 +23,6 @@ export const storage = {
             const result = await gaiaStorage.getFile(fileName, { decrypt: false });
             return { success: true, networkState: result }
         } catch (error) {
-            console.log(error)
             return { success: false, networkState: [] }
         }
 
@@ -35,7 +32,6 @@ export const storage = {
             const result = await gaiaStorage.putFile(fileName, JSON.stringify(config), { encrypt: false })
             return { success: true }
         } catch (error) {
-            console.log(error)
             return { success: false }
         }
     }

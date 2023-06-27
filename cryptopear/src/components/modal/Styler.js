@@ -12,12 +12,13 @@ export const MenuProps = {
     },
 };
 export const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
 export const style = {
     position: 'absolute',
     top: '50%',
@@ -25,16 +26,17 @@ export const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '2px',
+    borderRadius: '10px',
     boxShadow: 24,
     p: 4,
 };
 
 export function getStyles(name, personName, theme) {
     return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
     };
-  }
+}

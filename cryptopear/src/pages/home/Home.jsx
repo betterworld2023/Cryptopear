@@ -20,24 +20,16 @@ import "./Home.css";
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import { userSession, wallet } from '../../store/wallet';
 import { storage } from '../../store/storage';
-
-export const network = [
-    {
-        label: 'testnet',
-        network: new StacksTestnet,
-        chain: 'stacks',
-        toggled: false
-    },
-    {
-        label: 'mainnet',
-        network: new StacksMainnet,
-        chain: 'stacks',
-        toggled: true
-    }
-]
+import Loading from '../../components/skeleton/Loading';
+import TradeModal from '../../components/modal/TradeModal';
+import StatusModal from '../../components/modal/StatusModal';
+import ShareModal from '../../components/modal/ShareModal';
+import BuyModal from '../../components/modal/BuyModal';
+import { network } from '../../lib/constants';
 
 const Home = () => {
     const [networkToggle, setNetworkToggle] = useState(1);
+
     const [data, setData] = useState({ data: {}, init: true });
     const [tradeData, setTradeData] = useState();
 
@@ -45,6 +37,12 @@ const Home = () => {
     const [spacing, setSpacing] = useState(2);
     const [select, setSelect] = useState('');
     const [open, setOpen] = useState(false);
+
+    const [openTradeModal, setOpenTradeModal] = useState(false);
+    const [openStatusModal, setOpenStatusModal] = useState(false);
+    const [openShareModal, setOpenShareModal] = useState(false);
+    const [openBuyModal, setOpenBuyModal] = useState(false);
+
     // Declared constants
     const deviceInfo = getDeviceInfo();
     const anchor = deviceInfo.osName === 'Android' || deviceInfo.osName === 'iOS' ? 'bottom' : 'left';
@@ -117,12 +115,10 @@ const Home = () => {
                         returnAsset: 'mia'
                     }
                 ])
-                setNetworkToggle(networkState)
+                setNetworkToggle(networkState && 1)
             })
         }
     }, [data])
-
-    console.log(data)
 
     return (
         <>
@@ -141,14 +137,21 @@ const Home = () => {
                                         <Trades
                                             tradeId={tradeId} bns={bns} publisher={publisher} quantity={quantity}
                                             cost={cost} salesAsset={salesAsset} returnAsset={returnAsset}
+                                            showStatus={() => setOpenStatusModal(true)}
+                                            showShare={() => setOpenShareModal(true)}
+                                            ShowBuy={() => setOpenBuyModal(true)}
                                             sx={{ height: 140, width: 400, backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff', }} />
                                     </Grid>
-                                )) : <p>Loading</p>
+                                )) : <Loading />
                             }
                         </Grid>
                     </Grid>
                 </Grid>
             </div>
+            <TradeModal open={openTradeModal} close={() => setOpenTradeModal(false)} />
+            <StatusModal open={openStatusModal} close={() => setOpenStatusModal(false)} />
+            <ShareModal open={openShareModal} close={() => setOpenShareModal(false)} />
+            <BuyModal open={openBuyModal} close={() => setOpenBuyModal(false)} />
         </>
     );
 }

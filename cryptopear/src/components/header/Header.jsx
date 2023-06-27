@@ -68,7 +68,7 @@ const darkTheme = createTheme({
 
 export default function Header({ network, networkToggle, handleNetworkToggle }) {
     return (
-        <Stack spacing={2} sx={{ flexGrow: 1 }}>
+        <Stack spacing={2} sx={{ flexGrow: 1, margin: 0 }}>
             <ThemeProvider theme={darkTheme}>
                 <AppBar position="static" color="primary">
                     <Toolbar>

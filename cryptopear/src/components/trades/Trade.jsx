@@ -8,16 +8,10 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import './Trade.css';
 
-export default function Trades({ tradeId, bns, publisher, quantity, cost, salesAsset, returnAsset }) {
+export default function Trades({ tradeId, bns, publisher, quantity, cost, salesAsset, returnAsset, showStatus, showShare, ShowBuy }) {
   return (
     <>
-      <Card
-        sx={{
-          width: 300,
-          bgcolor: 'initial',
-          boxShadow: 'none',
-          '--Card-padding': '0px',
-        }}
+      <Card sx={{ width: 300, bgcolor: 'initial', boxShadow: 'none', '--Card-padding': '0px', }}
       >
         <div className='trades'>
           <p>Trade ID: {tradeId}</p>
@@ -29,13 +23,13 @@ export default function Trades({ tradeId, bns, publisher, quantity, cost, salesA
           <p>Quantity: {quantity} <span>{salesAsset}</span></p>
           <p>Amount Each: {cost} <span>{returnAsset}</span></p>
           <Stack direction="row" spacing={11}>
-            <IconButton color="secondary" aria-label="alarm" >
+            <IconButton color="secondary" aria-label="alarm" onClick={showStatus}>
               <AlarmIcon />
             </IconButton>
-            <IconButton color="warning" aria-label="share" >
+            <IconButton color="warning" aria-label="share" onClick={showShare}>
               <ShareIcon />
             </IconButton>
-            <IconButton color="success" aria-label="cart" >
+            <IconButton color="success" aria-label="cart" onClick={ShowBuy}>
               <AddShoppingCartIcon />
             </IconButton>
           </Stack>
